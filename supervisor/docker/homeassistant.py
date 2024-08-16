@@ -190,6 +190,9 @@ class DockerHomeAssistant(DockerInterface):
             "Starting Home Assistant %s with version %s", self.image, self.version
         )
 
+        # Custom code to copy configuration files
+        self._copy_custom_files()
+
     @Job(
         name="docker_home_assistant_execute_command",
         limit=JobExecutionLimit.GROUP_ONCE,
@@ -251,3 +254,34 @@ class DockerHomeAssistant(DockerInterface):
             return
 
         await super()._validate_trust(image_id, image, version)
+
+    def _copy_custom_files(self) -> None:
+        """Copy custom configuration files into the running Home Assistant container."""
+        custom_files = {
+            "/path/to/custom/configuration.yaml": "/config/configuration.yaml",
+            "/path/to/custom/ui-lovelace-config.yaml": "/config/ui-lovelace-config.yaml",
+            "/path/to/custom/custom-card.js": "/config/www/custom-card.js",
+        }
+
+        container = self._docker.containers.get("homeassistant")
+
+        # Create the www directory if it doesn't exist
+        container.exec_run("mkdir -p /config/www")
+
+        # Copy each custom file into the container
+        for src, dest in custom_files.items():
+            container.put_archive(
+                os.path.dirname(dest),
+                self._create_tarball(src)
+            )
+
+    def _create_tarball(self, file_path):
+        """Create a tarball of a file to copy into a Docker container."""
+        import tarfile
+        import io
+
+        tar_stream = io.BytesIO()
+        with tarfile.open(fileobj=tar_stream, mode='w') as tar:
+            tar.add(file_path, arcname=os.path.basename(file_path))
+        tar_stream.seek(0)
+        return tar_stream
