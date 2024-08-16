@@ -258,9 +258,9 @@ class DockerHomeAssistant(DockerInterface):
     def _copy_custom_files(self) -> None:
         """Copy custom configuration files into the running Home Assistant container."""
         custom_files = {
-            "/path/to/custom/configuration.yaml": "/config/configuration.yaml",
-            "/path/to/custom/ui-lovelace-config.yaml": "/config/ui-lovelace-config.yaml",
-            "/path/to/custom/custom-card.js": "/config/www/custom-card.js",
+            "./custom/configuration.yaml": "/config/configuration.yaml",
+            "./custom/ui-lovelace-config.yaml": "/config/ui-lovelace-config.yaml",
+            "./custom/guided-energy-config-card.js": "/config/www/guided-energy-config-card.js",
         }
 
         container = self._docker.containers.get("homeassistant")

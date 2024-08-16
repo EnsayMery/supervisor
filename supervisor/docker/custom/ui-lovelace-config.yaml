@@ -1,0 +1,36 @@
+views:
+  - name: Configuration-Energy
+    cards:
+      - type: markdown
+        content: >-
+          Ce tableau de bord va vous mettre de configurer votre home assistant avec
+          aissance 
+        title: 'Welcome '
+      - type: "custom:guided-energy-config-card"
+        title: 
+        steps:
+          - title: Panneaux solaire
+            description: "Pour configurer vos panneaux solaire cous avez besoin de la clé de connexion a ceux-ci fournie par votre instalateur et la marque de votre onduleur"
+            options:
+              - name: "SMA Solar"
+                url : "http://homeassistant.local:8123/_my_redirect/config_flow_start?domain=sma"
+              - name: "SolarEdge"
+                url : "http://homeassistant.local:8123/_my_redirect/config_flow_start?domain=solaredge"
+      - type: "custom:guided-energy-config-card"
+        title: 
+        steps:
+          - title: Forecast Solar
+            description: "Forecast solar va vous permettre de voir la prediction de votre production solaire pour le jour même et le lendemain ça vous permettra de mettre en place un planning de lancement. Pour le configurer, vous devez connaitre
+              (La latitude et longitude de votre maison, l'inclinaison des panneaux, leurs orientation et la puissance en Watt crête (Wc : grandeur physique de la puissance maximale
+              pour un dispositif)  )"
+            options:
+              - name: "Configurer" 
+                url : "http://homeassistant.local:8123/_my_redirect/config_flow_start?domain=forecast_solar"      
+      - type: "custom:guided-energy-config-card"
+        steps:
+          - title: Home Wizard
+            description: "Si vous poséder d'un nouveau compteur communicant grâce à home wizard vous pouvez suivre votre consommation et votre production attention il faut acheter le boitier sur le site à 30€"
+            options:
+              - name: "Configurer" 
+                url : "http://homeassistant.local:8123/_my_redirect/config_flow_start?domain=homewizard" 
+          
